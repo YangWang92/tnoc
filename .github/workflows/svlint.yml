@@ -9,38 +9,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Rust
-        uses: hecrj/setup-rust-action@v1
-        with:
-          rust-version: stable
-
-      - name: Cache .cargo
-        uses: actions/cache@v1
-        with:
-          path: .cargo
-          key: svlint-cargo-${{ github.sha }}
-          restore-keys: |
-            svlint-cargo-
-
       - name: Install svlint
         run: |
-          cargo install svlint
-        env:
-          CARGO_HOME: ${{ github.workspace }}/.cargo
-
-#      - name: Install svlint
-#        run: |
-#          sudo snap install svlint
+          sudo snap install svlint
 
       - name: Run svlint
         run: |
-          ${CARGO_HOME}/bin/svlint \
+          svlint \
             -f rtl/common/compile.f \
             -f rtl/router/compile.f \
             -f rtl/fabric/compile.f \
             -f rtl/axi_adapter/compile.f
         env:
-          CARGO_HOME: ${{ github.workspace }}/.cargo
           TNOC_HOME: ${{ github.workspace }}
-        continue-on-error:
-          true
+
